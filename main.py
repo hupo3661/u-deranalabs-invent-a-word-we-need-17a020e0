@@ -130,9 +130,10 @@ def output_path() -> Path:
 
     A blank override counts as unset: an empty string would only make
     the write fail with a confusing error, so fall back to the default.
+    A leading ``~`` in the override expands to the user's home directory.
     """
     override = os.environ.get("OUTPUT_PATH", "").strip()
-    return Path(override) if override else DEFAULT_OUTPUT
+    return Path(override).expanduser() if override else DEFAULT_OUTPUT
 
 
 def publish(path: Path, payload: bytes) -> None:
